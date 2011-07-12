@@ -7,6 +7,16 @@ Documentation and guides for Saplo API is found on the developer page: http://de
 
 Getting Started
 
+
+Install
+
+pip install git+git://github.com/rogeliorv/pysaplo.git
+
+Or download https://github.com/rogeliorv/pysaplo/zipball/master and run
+
+python setup.py install
+
+
 Get your API key http://saplo.com/api
 
 # Import
