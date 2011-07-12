@@ -1,0 +1,86 @@
+Saplo provides services that extract and refine valuable information from large quantities of text. We offer a range of 
+cost efficient text analysis services through an API (Application programming interface). 
+Services can be used either stand alone or combined into new and exiting concepts and technologies.
+
+
+Documentation and guides for Saplo API is found on the developer page: http://developer.saplo.com.
+
+Getting Started
+
+Get your API key http://saplo.com/api
+
+# Import
+from pysaplo.saploapi import *
+
+# Authentication
+# To authenticate with the API you run the method auth.accessToken. If your API key and your Secret key (your key pair) 
+# is valid a token is created which you will use for further API calls.
+
+# When creating the SaploJSONClient object you will automatically be authenticated.
+client = SaploJSONClient("YOUR API KEY", "YOUR SECRET KEY")
+
+# You can also explicitly get your Access Token
+print client.token
+
+
+# To be able to extract information (Tags, Related Texts, Related Contexts etc.) from the API you first need to add some
+# texts to the system. Texts are stored in text collections that you create. 
+# A collection can only contain text for a single language (e.g. only English texts).
+ 
+collection_id = client.collection.create(
+    name = "My Collection",
+    description = "This is my first collection for english texts.",
+    language = "en"
+)
+ 
+print "New collection created with Id:", collection_id
+
+
+
+# Add a text to a collection
+# After creating a collection you can start adding texts to it.
+# Add a text using the method text.add. When the text has been added it will get a unique id inside of that collection. 
+
+text_id = client.text.create(
+            collection_id=678,
+            headline='Example Headline',
+            body='This is a short example text. Insert a longer one for better results'
+            )
+ 
+print "New text created with Id:", text_id
+
+
+
+# Get Entity Tags
+# Now that we have a text in our collection we can get entity tags from that text.
+# Get tags using the method text.tags
+
+tags = client.text.tags(
+            collection_id=678,
+            text_id=2,
+            wait=10
+            )
+ 
+print "Retrieved these tags from the text:", tags
+
+# Get Related Texts
+# To be able to get related texts we need to add additional texts to the collection. When fetching related texts the API 
+# searches through the collection to find the texts that are most similar to each other.
+# To get related texts we run the method text.relatedTexts and specify the text id and collection id we want results for.
+# The system will now index all texts and give return a list with results. In the result list you will find the related 
+# text id and the relevance which is a value between 0.0 and 1.0, a higher number indicating more relevance.
+
+related_texts = client.text.related_texts(
+            collection_id=678,
+            text_id=1,
+            wait=30
+            )
+ 
+print "Related texts:", related_texts
+
+# Reset a Collection
+reset_collection = client.collection.reset(
+                collection_id=678,
+                )
+ 
+print "Successfully reseted corpus with properties: ", reset_collection
